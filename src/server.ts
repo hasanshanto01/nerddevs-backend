@@ -4,8 +4,13 @@ import cors from "cors";
 
 import supportRoute from "./routes/supportRoute";
 import { errorHandler } from "./middlewares/errorHandler";
+import connectDB from "./config/dbConfig";
+import { ticketRequestLimiter } from "./middlewares/ticketRequestLimiter";
 
 dotenv.config();
+
+// db connection
+connectDB();
 
 const app = express();
 const port = 5000;
@@ -15,7 +20,7 @@ app.use(cors());
 app.use(express.json());
 
 // use all routes
-app.use("/api/v1/support", supportRoute);
+app.use("/api/v1/support", ticketRequestLimiter, supportRoute);
 
 // custome middlewares
 app.use(errorHandler);

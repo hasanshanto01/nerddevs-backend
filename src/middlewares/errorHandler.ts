@@ -7,7 +7,7 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  const statusCode = res.statusCode ? res.statusCode : constants.SERVER_ERROR;
+  const statusCode = res.statusCode ? res?.statusCode : constants?.SERVER_ERROR;
 
   switch (statusCode) {
     case constants.BAD_REQUEST:
