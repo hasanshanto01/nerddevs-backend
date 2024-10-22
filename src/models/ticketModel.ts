@@ -9,10 +9,22 @@ interface ITicket extends Document {
 
 const ticketSchema = new Schema<ITicket>(
   {
-    userId: { type: String, required: [true, "User ID is required"] },
-    date: { type: Date },
-    deviceId: { type: String, required: [true, "Device ID is required"] },
-    queryText: { type: String, required: [true, "Query text is required"] },
+    userId: {
+      type: String,
+      required: [true, "User ID is required"],
+      trim: true,
+    },
+    date: { type: Date, required: true },
+    deviceId: {
+      type: String,
+      required: [true, "Device ID is required"],
+      trim: true,
+    },
+    queryText: {
+      type: String,
+      required: [true, "Query text is required"],
+      trim: true,
+    },
   },
   { timestamps: true }
 );

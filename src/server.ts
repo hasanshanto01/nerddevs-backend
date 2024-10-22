@@ -2,10 +2,11 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 
-import supportRoute from "./routes/supportRoute";
-import { errorHandler } from "./middlewares/errorHandler";
 import connectDB from "./config/dbConfig";
+import { errorHandler } from "./middlewares/errorHandler";
 import { ticketRequestLimiter } from "./middlewares/ticketRequestLimiter";
+import supportRoute from "./routes/supportRoute";
+import userRoute from "./routes/userRoute";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(express.json());
 
 // use all routes
 app.use("/api/v1/support", ticketRequestLimiter, supportRoute);
+app.use("/api/v1/user", userRoute);
 
 // custome middlewares
 app.use(errorHandler);
