@@ -2,6 +2,13 @@
 
 ## Live-Site: (https://nerddevs-backend.vercel.app/) [Live link might not work properly]
 
+## Technologies
+
+- Node
+- Express
+- Typscript
+- MongoDB
+
 ## Features
 
 - Ticket create api with request limit
