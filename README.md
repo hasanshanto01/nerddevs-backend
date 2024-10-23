@@ -14,7 +14,7 @@
 Clone the project:
 
 ```bash
-https://github.com/hasanshanto01/nerddevs-backend.git
+git clone https://github.com/hasanshanto01/nerddevs-backend.git
 ```
 
 Go to the project directory
