@@ -29,6 +29,7 @@ const userSchema = new Schema<IUser>(
         /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
         "Please enter a valid email address",
       ],
+      unique: true,
     },
     mobile: {
       type: String,
@@ -38,6 +39,7 @@ const userSchema = new Schema<IUser>(
         /^[0-9]{10,15}$/,
         "Please enter a valid mobile number with 10 to 15 digits",
       ],
+      unique: true,
     },
     password: {
       type: String,

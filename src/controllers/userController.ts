@@ -1,12 +1,11 @@
-// @desc register a user
-// route POST /api/v1/user/register
-// access public
-
 import { NextFunction, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { userModel } from "../models/userModel";
 
+// @desc register a user
+// route POST /api/v1/user/register
+// access public
 export const registerUser = async (
   req: Request,
   res: Response,
@@ -28,10 +27,18 @@ export const registerUser = async (
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await userModel.findOne({ email });
+    const user = await userModel.findOne({ $or: [{ email }, { mobile }] });
 
     if (user) {
       return res.status(409).json({
+        title: "Conflict Error",
+        message: "User already exists",
+      });
+    }
+
+    if (user) {
+      return res.status(409).json({
+        title: "Conflict Error",
         message: "User already exists",
       });
     }
@@ -52,8 +59,8 @@ export const registerUser = async (
     );
 
     return res.status(201).json({
-      message:
-        "Registration successful. Please check your email to activate your account.",
+      title: "Registration Successful",
+      message: "Please check your email to activate your account.",
       token: `${process.env.BASE_URL}/api/v1/user/activation?token=${activationToken}`,
     });
   } catch (err) {
@@ -73,7 +80,6 @@ export const registerUser = async (
 // @desc activate a user
 // route GET /api/v1/user/activation
 // access public
-
 export const activateUser = async (
   req: Request,
   res: Response,
@@ -113,19 +119,26 @@ export const activateUser = async (
     );
 
     if (updatedUser.modifiedCount > 0) {
-      return res
-        .status(200)
-        .json({ message: "Account activated successfully!" });
+      return res.status(200).json({
+        title: "Account Activation",
+        message: "Account activated successfully!",
+      });
     }
   } catch (err) {
     console.error("Error activating account:", err);
 
     if (err instanceof Error && err.name === "JsonWebTokenError") {
-      return res.status(400).json({ message: "Invalid activation token" });
+      const error = new Error("Invalid activation token");
+      res.status(400);
+      return next(error);
     } else if (err instanceof Error && err.name === "TokenExpiredError") {
-      return res.status(400).json({ message: "Activation token has expired" });
+      const error = new Error("Activation token has expired");
+      res.status(400);
+      return next(error);
     } else {
-      return res.status(500).json({ message: "Internal server error" });
+      const error = new Error("Internal server error");
+      res.status(500);
+      return next(error);
     }
   }
 };
@@ -133,7 +146,6 @@ export const activateUser = async (
 // @desc login a user
 // route POST /api/v1/user/login
 // access public
-
 export const loginUser = async (
   req: Request,
   res: Response,
@@ -177,8 +189,9 @@ export const loginUser = async (
       { expiresIn: "1d" }
     );
 
-    return res.status(201).json({
-      message: "Login successful.",
+    return res.status(200).json({
+      title: "Login successful",
+      message: "User logged in successfully",
       token,
     });
   } catch (err) {
